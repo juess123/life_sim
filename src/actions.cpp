@@ -92,3 +92,48 @@ void do_double_weekend(Agent& a)
 {
     //
 }
+std::string action_to_string(Action a)
+{
+    switch(a)
+    {
+        case Action::Eat: return "Eat";
+        case Action::Sleep: return "Sleep";
+        case Action::Work: return "Work";
+        case Action::StayHome: return "StayHome";
+        case Action::Travel: return "Travel";
+    }
+    return "Unknown";
+}
+void perform_action(Agent& a, Action act)
+{
+    switch(act)
+    {
+        case Action::Eat:
+            a.needs.basic.hunger -= 40;
+            a.emotion.mood += 5;
+            break;
+
+        case Action::Sleep:
+            a.needs.basic.rest -= 50;
+            a.emotion.stress -= 10;
+            break;
+
+        case Action::Work:
+            a.resources.money += 200;
+            a.needs.basic.rest += 20;
+            a.needs.basic.hunger += 15;
+            a.emotion.stress += 10;
+            break;
+
+        case Action::StayHome:
+            a.emotion.stress -= 5;
+            a.emotion.mood += 3;
+            break;
+
+        case Action::Travel:
+            a.resources.money -= 500;
+            a.emotion.stress -= 30;
+            a.emotion.mood += 20;
+            break;
+    }
+}

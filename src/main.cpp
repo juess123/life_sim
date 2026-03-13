@@ -1,14 +1,15 @@
 #include <iostream>
 #include "../include/world_time.h"
 #include "../include/agent.h"
-
+#include "../include/actions.h"
+#include "../include/simulation.h"
 int main()
 {
     Agent agent = init_agent();
 
     SimTime time = init_time();
 
-    for(int step = 0; step < 100000; step++)
+    for(int step = 0; step < 10; step++)
     {
         Action act = decide_action(agent,time);
 
