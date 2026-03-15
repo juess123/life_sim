@@ -1,59 +1,30 @@
 #include "../include/simulation.h"
-#include <fstream>
-#include <nlohmann/json.hpp>
+#include <cmath>
 
-using json = nlohmann::json;
-
-Action decide_action(const Agent& a,const SimTime& t)
+void init_simulation(Simulation& sim)
 {
-    if(a.needs.basic.hunger > 70)
-        return Action::Eat;
-
-    if(a.needs.basic.rest > 80)
-        return Action::Sleep;
-
-    if(a.emotion.stress > 80 && a.resources.money > 500)
-        return Action::Travel;
-
-    if(!is_weekend(t) && t.hour >= 9 && t.hour <= 18)
-        return Action::Work;
-
-    return Action::StayHome;
+    sim.target_index = 0;
+    sim.speed = 4;
 }
 
-void save_dataset(const Agent& a,const SimTime& t,Action act)
+void update_simulation(Simulation& sim, World& world)
 {
-    json data;
+    Location target = world.locations[sim.target_index];
 
-    data["time"] = {
-        {"hour",t.hour},
-        {"weekday",t.week_day},
-        {"day",t.day}
-    };
+    if (sim.location.x    < target.x) sim.location.x += sim.speed;
+    if (sim.location.x > target.x) sim.location.x -= sim.speed;
 
-    data["state"] = {
-        {"hunger",a.needs.basic.hunger},
-        {"rest",a.needs.basic.rest},
-        {"stress",a.emotion.stress},
-        {"money",a.resources.money}
-    };
+    if (sim.location.y < target.y) sim.location.y += sim.speed;
+    if (sim.location.y > target.y) sim.location.y -= sim.speed;
 
-    data["action"] = action_to_string(act);
-
-    std::ofstream file("datasets/dataset.jsonl",std::ios::app);
-    file << data.dump() << std::endl;
-}
-
-void run_simulation(Agent& agent,SimTime& time,int steps)
-{
-    for(int i=0;i<steps;i++)
+    if (abs(sim.location.x - target.x) < 4 &&
+        abs(sim.location.y - target.y) < 4)
     {
-        Action act = decide_action(agent,time);
+        sim.location.location_name = target.location_name;
 
-        save_dataset(agent,time,act);
+        sim.target_index++;
 
-        perform_action(agent,act);
-
-        advance_time(time);
+        if (sim.target_index >= world.locations.size())
+            sim.target_index = 0;
     }
 }

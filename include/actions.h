@@ -6,12 +6,15 @@ enum class Action
 {
     Eat,
     Sleep,
+    Social,
     Work,
-    StayHome,
-    Travel
+    Func,
+    No
 };
 std::string action_to_string(Action a);
 
 void perform_action(Agent& a, Action act);
+
+Action decide_action(const Agent& a, const SimTime& t);
 
 #endif

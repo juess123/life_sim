@@ -7,7 +7,7 @@ Needs init_needs()
 {
     Needs n;
     n.basic.hunger = 50.0f;
-    n.basic.rest = 50.0f;
+    n.basic.rest = 30.0f;
     n.basic.social = 50.0f;
 
     n.higher.fun = 50.0f;

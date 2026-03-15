@@ -1,14 +1,14 @@
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#pragma once
 
+#include "world.h"
 #include "agent.h"
-#include "world_time.h"
-#include "actions.h"
+struct Simulation
+{
+    Agent agent;
+    int target_index;
+    int speed;
+    Location location;
+};
 
-Action decide_action(const Agent& a,const SimTime& t);
-
-void save_dataset(const Agent& a,const SimTime& t,Action act);
-
-void run_simulation(Agent& agent,SimTime& time,int steps);
-
-#endif
+void init_simulation(Simulation& sim);
+void update_simulation(Simulation& sim, World& world);
